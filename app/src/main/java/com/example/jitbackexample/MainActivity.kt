@@ -26,6 +26,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -106,8 +107,30 @@ fun TopHeader(totalPerPerson: Double) {
 @Preview
 @Composable
 fun MainContent() {
+    val tipValue = remember {
+        mutableStateOf("0.0")
+    }
+    val totalPersonSate = remember {
+        mutableStateOf("")
+    }
+    val ingressDegreesValue = remember {
+        mutableStateOf(1)
+    }
+    val sliderPositionState = remember {
+        mutableStateOf(0f)
+    }
+    val totalPerPerson = remember {
+        mutableStateOf(0.0)
+    }
+
     Column() {
-    BillForm {
+    BillForm(
+        tipValue=tipValue,
+        totalPersonSate = totalPersonSate,
+        ingressDegreesValue = ingressDegreesValue,
+        sliderPositionState = sliderPositionState,
+        totalPerPerson=totalPerPerson
+    ) {
         Log.d("TAG", "MainContent------>: $it")
     }
     }
@@ -118,23 +141,18 @@ fun MainContent() {
 @Composable
 fun BillForm(
     modifier: Modifier = Modifier,
+    tipValue:MutableState<String>,
+    totalPersonSate:MutableState<String>,
+    ingressDegreesValue:MutableState<Int>,
+    sliderPositionState:MutableState<Float>,
+    totalPerPerson:MutableState<Double>,
     changeValue: (String) -> Unit
 ) {
-    val totalPersonSate = remember {
-        mutableStateOf("")
-    }
-    val ingressDegreesValue = remember {
-        mutableStateOf(1)
-    }
-    val sliderPositionState = remember {
-        mutableStateOf(0f)
-    }
-    val tipValue = remember {
-        mutableStateOf("0.0")
-    }
-    val totalPerPerson = remember {
-        mutableStateOf(0.0)
-    }
+
+
+
+
+
     val validState = remember(totalPersonSate.value) {
         totalPersonSate.value.trim().isNotEmpty()
 
@@ -145,7 +163,7 @@ fun BillForm(
     TopHeader(totalPerPerson.value)
 
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .padding(15.dp)
             .wrapContentHeight(Alignment.Top)
             .fillMaxWidth(),
@@ -245,7 +263,7 @@ fun BillForm(
 
                         },
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                        steps = 5,
+//                        steps = 5,
                         onValueChangeFinished = {
                             Log.d("TAG", "BillForm:onValueChangeFinished ")
                         }
